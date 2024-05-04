@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface IJob {
+export interface IJob {
   companyName: string;
   jdLink: string;
   jdUid: string;
@@ -18,13 +18,16 @@ interface IJobStates {
   data: {
     jobs: IJob[];
     totalResults: number;
-  } | null;
+  };
   error: any;
   loading: boolean;
 }
 
 const initialState: IJobStates = {
-  data: null,
+  data: {
+    jobs: [],
+    totalResults: 0,
+  },
   error: null,
   loading: false,
 };
@@ -40,7 +43,7 @@ export const JobsSlice = createSlice({
     success: (state, action: PayloadAction<IJobStates["data"]>) => {
       state.loading = false;
       state.error = null;
-      state.data?.jobs.push(...(action?.payload?.jobs || []));
+      state.data.jobs.push(...(action?.payload?.jobs || []));
     },
     error: (state, action: PayloadAction<IJobStates["error"]>) => {
       state.error = action.payload;
