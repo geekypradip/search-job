@@ -49,9 +49,12 @@ const JobsSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    reset: (state) => {
+      state = initialState;
+    },
   },
 });
 
-export const { error, loading, success } = JobsSlice.actions;
+export const { error, loading, success, reset } = JobsSlice.actions;
 
 export default JobsSlice.reducer;

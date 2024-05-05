@@ -1,6 +1,10 @@
 import { Autocomplete, Stack, TextField } from "@mui/material";
-import { Children, useRef } from "react";
-import { IFilter, updateFilter } from "../../redux/reducer/filter-slicer";
+import { Children, useEffect, useRef } from "react";
+import {
+  IFilter,
+  resetFilter,
+  updateFilter,
+} from "../../redux/reducer/filter-slicer";
 import { useAppDispatch } from "../../redux/reducer/hooks";
 import { filterData } from "./helper";
 
@@ -28,6 +32,14 @@ export const FilterWrapper = () => {
     }, 500);
   };
 
+  useEffect(() => {
+    return () => {
+      if (timerId.current) {
+        clearTimeout(timerId.current);
+      }
+      dispatch(resetFilter());
+    };
+  }, []);
   return (
     <Stack direction={"row"} width={"90%"} gap={1} p={1} flexWrap={"wrap"}>
       {Children.toArray(

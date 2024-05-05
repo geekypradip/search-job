@@ -2,10 +2,11 @@ import { Box } from "@mui/material";
 import { Children, useEffect } from "react";
 import { JobCard } from "../../components";
 import { useFetchJobs } from "../../hooks";
-import { useAppSelector } from "../../redux/reducer/hooks";
-import { IJob } from "../../redux/reducer/jobs-slicer";
+import { useAppDispatch, useAppSelector } from "../../redux/reducer/hooks";
+import { IJob, reset } from "../../redux/reducer/jobs-slicer";
 
 export const JobsWrapper = () => {
+  const dispatch = useAppDispatch();
   const { data, error, loading } = useAppSelector((state) => state.Jobs);
   const { filter } = useAppSelector((state) => state.Filter);
   const { fetchJobs } = useFetchJobs();
@@ -42,6 +43,10 @@ export const JobsWrapper = () => {
 
   useEffect(() => {
     fetchJobs();
+
+    return () => {
+      dispatch(reset());
+    };
   }, []);
   return (
     <Box
