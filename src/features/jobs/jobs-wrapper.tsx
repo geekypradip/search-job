@@ -3,10 +3,43 @@ import { Children, useEffect } from "react";
 import { JobCard } from "../../components";
 import { useFetchJobs } from "../../hooks";
 import { useAppSelector } from "../../redux/reducer/hooks";
+import { IJob } from "../../redux/reducer/jobs-slicer";
 
 export const JobsWrapper = () => {
   const { data, error, loading } = useAppSelector((state) => state.Jobs);
+  const { filter } = useAppSelector((state) => state.Filter);
   const { fetchJobs } = useFetchJobs();
+
+  const handleFilter = (job: IJob) => {
+    const conditions = [
+      () =>
+        !filter.companyName ||
+        job.companyName
+          .toLowerCase()
+          .includes(filter.companyName.toLowerCase()),
+      () => !filter.minExp || Number(job.minExp) <= Number(filter.minExp),
+
+      () =>
+        !filter.minSalary ||
+        Number(job.minJdSalary) >= Number(filter.minSalary),
+
+      () =>
+        !filter.location ||
+        filter.location.length === 0 ||
+        filter.location.some((location) =>
+          job.location.toLowerCase().includes(location.toLowerCase())
+        ),
+      () =>
+        !filter.jobRole ||
+        filter.jobRole.length === 0 ||
+        filter.jobRole.some((role) =>
+          job.jobRole.toLowerCase().includes(role.toLowerCase())
+        ),
+    ];
+
+    return conditions.every((condition) => condition());
+  };
+
   useEffect(() => {
     fetchJobs();
   }, []);
@@ -19,7 +52,9 @@ export const JobsWrapper = () => {
       overflow={"scroll"}
       p={1}
     >
-      {Children.toArray(data.jobs.map((job) => <JobCard {...job} />))}
+      {Children.toArray(
+        data.jobs.filter(handleFilter).map((job) => <JobCard {...job} />)
+      )}
     </Box>
   );
 };

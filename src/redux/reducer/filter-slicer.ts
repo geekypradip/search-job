@@ -25,8 +25,11 @@ export const FilterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    updateFilter: (state, action: PayloadAction<IFilter>) => {
-      state.filter = action.payload;
+    updateFilter: (
+      state,
+      action: PayloadAction<{ key: keyof IFilter; value: any }>
+    ) => {
+      state.filter[action.payload.key] = action.payload.value;
     },
 
     resetFilter: (state) => {

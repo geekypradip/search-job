@@ -1,13 +1,11 @@
 import { Autocomplete, Stack, TextField } from "@mui/material";
 import { Children, useRef } from "react";
 import { IFilter, updateFilter } from "../../redux/reducer/filter-slicer";
-import { useAppDispatch, useAppSelector } from "../../redux/reducer/hooks";
+import { useAppDispatch } from "../../redux/reducer/hooks";
 import { filterData } from "./helper";
 
 export const FilterWrapper = () => {
-  const { filter } = useAppSelector((state) => state.Filter);
   const dispatch = useAppDispatch();
-
   const timerId = useRef<NodeJS.Timeout | null>(null);
 
   const handleFilterChange = (data: {
@@ -21,7 +19,12 @@ export const FilterWrapper = () => {
       clearTimeout(timerId.current);
     }
     timerId.current = setTimeout(() => {
-      dispatch(updateFilter({ ...filter, [accessKey]: value }));
+      dispatch(
+        updateFilter({
+          key: accessKey,
+          value: value,
+        })
+      );
     }, 500);
   };
 
