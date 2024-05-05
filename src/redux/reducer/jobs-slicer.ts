@@ -21,6 +21,7 @@ interface IJobStates {
   };
   error: any;
   loading: boolean;
+  allFetched: boolean;
 }
 
 const initialState: IJobStates = {
@@ -30,6 +31,7 @@ const initialState: IJobStates = {
   },
   error: null,
   loading: false,
+  allFetched: false,
 };
 
 const JobsSlice = createSlice({
@@ -44,6 +46,7 @@ const JobsSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.data.jobs.push(...(action?.payload?.jobs || []));
+      state.data.totalResults = action.payload.totalResults;
     },
     error: (state, action: PayloadAction<IJobStates["error"]>) => {
       state.error = action.payload;
@@ -52,9 +55,12 @@ const JobsSlice = createSlice({
     reset: (state) => {
       state = initialState;
     },
+    allFetched: (state) => {
+      state.allFetched = true;
+    },
   },
 });
 
-export const { error, loading, success, reset } = JobsSlice.actions;
+export const { error, loading, success, reset, allFetched } = JobsSlice.actions;
 
 export default JobsSlice.reducer;

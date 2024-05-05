@@ -9,9 +9,15 @@ import { useAppDispatch } from "../../redux/reducer/hooks";
 import { filterData } from "./helper";
 
 export const FilterWrapper = () => {
+  //action dispatcher function
   const dispatch = useAppDispatch();
+  //timer ref to store the timer id of the debounced timer
   const timerId = useRef<NodeJS.Timeout | null>(null);
 
+  /**
+   * @param data
+   * @description handle filter change of the inputs and dispatch the action to the redux with debounced
+   */
   const handleFilterChange = (data: {
     accessKey: keyof IFilter;
     value: string & string[];
@@ -33,6 +39,7 @@ export const FilterWrapper = () => {
   };
 
   useEffect(() => {
+    //clear the timer and filter on unmount
     return () => {
       if (timerId.current) {
         clearTimeout(timerId.current);
@@ -40,8 +47,17 @@ export const FilterWrapper = () => {
       dispatch(resetFilter());
     };
   }, []);
+
+  //For the below inputs [autoComplete, textField] we are using the same function to handle the change, here can't use event delegation  because autoComplete  onChange is not bubbled to the parent
   return (
-    <Stack direction={"row"} width={"90%"} gap={1} p={1} flexWrap={"wrap"}>
+    <Stack
+      direction={"row"}
+      width={"90%"}
+      gap={1}
+      p={1}
+      flexWrap={"wrap"}
+      justifyContent={{ xs: "center", sm: "flex-start" }}
+    >
       {Children.toArray(
         filterData.map((filter) => (
           <Autocomplete
