@@ -32,7 +32,7 @@ const initialState: IJobStates = {
   loading: false,
 };
 
-export const JobsSlice = createSlice({
+const JobsSlice = createSlice({
   name: "jobs",
   initialState,
   reducers: {

@@ -11,7 +11,14 @@ export const JobsWrapper = () => {
     fetchJobs();
   }, []);
   return (
-    <Box maxWidth="xl" display={"flex"} flexWrap={"wrap"} gap={3}>
+    <Box
+      display={"flex"}
+      flexWrap={"wrap"}
+      gap={3}
+      maxHeight={"90vh"}
+      overflow={"scroll"}
+      p={1}
+    >
       {Children.toArray(data.jobs.map((job) => <JobCard {...job} />))}
     </Box>
   );
